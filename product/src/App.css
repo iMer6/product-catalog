@@ -1,0 +1,24 @@
+.nav-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.nav-link {
+    color: color(display-p3 0.919 0.979 0.865);
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.cart-btn {
+    background-color: #ad401d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
