@@ -4,7 +4,7 @@
     margin: 0 auto;
 }
 .search-input {
-    width: 100%;
+    width: calc(100% - 26px); /* padding * 2 + border * 2 ==> 12px * 2 + 1px * 2 ==> 26px */
     padding: 12px;
     margin-bottom: 30px;
     border-radius: 8px;
@@ -24,7 +24,7 @@
 }
 .icon-wrapper {
     font-size: 32px;
-    color: #0984e3;
+    color: #147c9d;
     margin-bottom: 15px;
 }
 .icon {
@@ -32,7 +32,7 @@
 }
 .product-name {
     font-size: 18px;
-    color: #2d3436;
+    color: #130119;
 }
 .category {
     color: #636e72;
@@ -40,13 +40,13 @@
 }
 .price {
     font-weight: bold;
-    font-size: '22px';
-    color: '#27ae60';
+    font-size: 22px;
+    color: #27ae60;
     margin: 15px 0;
 }
 .btn {
     background-color: #3498db;
-    color: white;
+    color: #edf9be;
     border: none;
     padding: 10px 15px;
     border-radius: 6px;

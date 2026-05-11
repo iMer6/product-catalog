@@ -1,19 +1,25 @@
 .nav-container {
     padding: 20px;
-    display: flex;
+    display: flex;  
     justify-content: center;
     gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
-
 .nav-link {
-    color: color(display-p3 0.919 0.979 0.865);
+    color: #eaf9dc;
     text-decoration: none;
     font-size: 24px;
     font-weight: bold;
 }
-
+.auth-modal {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+}
 .cart-btn {
-    background-color: #ad401d;
+    background-color: #2b0a43;
     color: white;
     border: none;
     padding: 8px 15px;
