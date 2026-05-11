@@ -50,10 +50,11 @@ app.post('/sign-up', (req, res) => {
             // Creating a session immediately after registration.
             // user doesn't need to log in
             req.session.userName = req.body.name;
+            req.session.userEmail = req.body.email;
 
             res.status(201).json({
                 message: 'User saved successfully',
-                user: { name: user.name }
+                user: { name: user.name, email: user.email }
             })
         });
     });
@@ -77,15 +78,42 @@ app.post('/log-in', (req, res) => {
 
         if (user) {
             req.session.userName = user.username;
+            req.session.userEmail = user.email;
 
             res.status(200).json({
                 message: 'Successfully authorization',
-                user: { name: user.username }
+                user: { name: user.username, email: user.email }
             })
         } else {
             res.status(401).send('Wrong email or password');
         }
     })
+});
+
+app.post('/checkout', (req, res) => {
+    const newOrder = req.body;
+    const file = 'orders.json';
+
+    fs.readFile(file, 'utf8', (err, data) => {
+        let orders = [];
+        
+        if (!err && data) {
+            try {
+                orders = JSON.parse(data);
+            } catch (e) {
+                console.log("Помилка:", e);
+                orders = [];
+            }
+        }
+        orders.push(newOrder);
+
+        fs.writeFile(file, JSON.stringify(orders, null, 2), (err) => {
+            if (err) {
+                return res.status(500).json({ message: "Error writing file" });
+            }
+            res.status(200).json({ message: "The order is saved" });
+        });
+    });
 });
 
 app.listen(3000, () => {

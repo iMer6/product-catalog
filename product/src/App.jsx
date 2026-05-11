@@ -14,6 +14,7 @@ const Home = () => (
 
 const App = () => {
   if (!sessionStorage.getItem('userName')) sessionStorage.setItem('userName', 'Гість');
+  const [name, setName] = useState(sessionStorage.getItem('userName'));
 
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -41,6 +42,8 @@ const App = () => {
     });
   };
 
+  const clearCart = () => { setCart([]); };
+
   const totalItemsCount = cart.reduce((sum, el) => sum + el.quantity, 0);
 
   return (
@@ -52,14 +55,24 @@ const App = () => {
           <i className="bi bi-basket3"></i> ({totalItemsCount})
         </button>
         <button onClick={() => setIsRegisterOpen(true)} className="nav-link auth-modal">
-          {`${sessionStorage.getItem('userName')} `}
+          {`${name} `}
           <i className="bi bi-person-circle"></i>
         </button>
       </nav>
 
-      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cart} removeFromCart={removeFromCart}/>
+      <CartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cart}
+        removeFromCart={removeFromCart}
+        clearCart={clearCart}
+      />
 
-      <AuthModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)}/>
+      <AuthModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+        setName={setName}
+      />
 
       <Routes>
         <Route path="/" element={<Home />}/>
@@ -69,16 +82,49 @@ const App = () => {
   );
 };
 
-const CartModal = ({ isOpen, onClose, cartItems, removeFromCart }) => {
+const CartModal = ({ isOpen, onClose, cartItems, removeFromCart, clearCart }) => {
   useEffect(() => {
     const keyDown = (event) => { if (event.key === 'Escape') { onClose(); } };
     if (isOpen) { window.addEventListener('keydown', keyDown); } // add listener when modal form is open
     return () => { window.removeEventListener('keydown', keyDown); }; // remove listener when modal form is close 
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
   const totalSum = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const handleCheckout = async () => {
+    const userEmail = sessionStorage.getItem('userEmail') || 'example@email.com';
+
+    const orderData = {
+      email: userEmail,
+      items: cartItems.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        totalItemPrice: item.price * item.quantity
+      })),
+      totalSum: totalSum,
+      date: new Date().toLocaleString()
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        alert("Замовлення успішно оформлено!");
+        clearCart();
+        onClose();
+      } else {
+        alert("Помилка при оформленні замовлення");
+      }
+    } catch (err) {
+      console.error("Помилка:", err);
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div className='overlay'>
@@ -93,7 +139,6 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart }) => {
             <p style={{ textAlign: 'center' }}>Кошик порожній</p>
           ) : (
             <>
-              {}
               <div className='cart-row' style={{ fontWeight: 'bold', borderBottom: '2px solid #eee'}}>
                 <span className='item-name'>Назва товару</span>
                 <span style={{ textAlign: 'center' }}>Кількість</span>
@@ -101,7 +146,6 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart }) => {
                 <span></span> {}
               </div>
 
-              {}
               {cartItems.map((item) => (
                 <div key={item.id} className='cart-row'>
                   <span className='item-name'>{item.name}</span>
@@ -119,7 +163,7 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart }) => {
         {cartItems.length > 0 && (
           <div className='footer'>
             <h3>Разом: {totalSum} грн</h3>
-            <button className='btn'>Оформити замовлення</button>
+            <button className='btn' onClick={() => handleCheckout()}>Оформити замовлення</button>
           </div>
         )}
       </div>
@@ -127,12 +171,11 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart }) => {
   );
 };
 
-const AuthModal = ({ isOpen, onClose }) => {
+const AuthModal = ({ isOpen, onClose, setName }) => {
   // state for switching Sign-up/Log-in form
   // true – Log in
   // false – Sign up
   const [isLogin, setIsLogin] = useState(false); 
-
   const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
 
   useEffect(() => {
@@ -168,19 +211,25 @@ const AuthModal = ({ isOpen, onClose }) => {
       if (response.ok) {
         const data = await response.json();
 
-        if (data.user.name) sessionStorage.setItem('userName', data.user.name)
+        if (data.user) {
+          sessionStorage.setItem('userName', data.user.name);
+          sessionStorage.setItem('userEmail', data.user.email);
+        }
 
         !isLogin
-          ? alert("The data successfully written to file!")
+          ? alert("Successfully sign up")
           : alert("Successfully log in");
+
+        // change username without reload entire page
+        setName(sessionStorage.getItem('userName'));
       } else if (response.status === 409) { 
         alert("Цей імейл вже зайнятий!");
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message || "Щось пішло не так");
       }
-    } catch (error) {
-      console.error("Помилка:", error);
+    } catch (err) {
+      console.error("Помилка:", err);
     }
 
     setFormData({ username: '', email: '', password: '', confirmPassword: '' }); // clears the data
