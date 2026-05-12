@@ -22,6 +22,7 @@
 .form-input:focus {
     border-color: #2e2d1c;
 }
+/* sign up / log in */
 .sU-lI {
     color: #27ae60;
     cursor: pointer;

@@ -1,0 +1,35 @@
+.cart-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 120px 100px;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    border-bottom: 1px solid white;
+}
+.item-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+    text-align: left;
+}
+.item-price {
+    font-size: 16px;
+    color: #27ae60;
+    font-weight: bold;
+    min-width: 80px;
+    text-align: right;
+}
+.action-area {
+    display: flex;
+    justify-content: flex-end;
+    min-width: 100px;
+}
+.remove-btn {
+    background-color: #ff7675;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
