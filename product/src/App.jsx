@@ -6,7 +6,7 @@ import CartModal from "./components/CartModal.jsx";
 import AuthModal from "./components/AuthModal.jsx";
 import ProductCatalog from "./components/ProductCatalog.jsx";
 
-import "./App.css";
+import appStyles from "./App.module.css";
 
 const App = () => {
   if (!sessionStorage.getItem('userName')) sessionStorage.setItem('userName', 'Гість');
@@ -44,13 +44,13 @@ const App = () => {
 
   return (
     <Router>
-      <nav className='nav-container'>
-        <Link className='nav-link' to="/">Головна</Link>
-        <Link className='nav-link' to="/products">Каталог товарів</Link>
-        <button onClick={() => setIsCartOpen(true)} className='cart-btn'>
+      <nav className={appStyles['nav-container']}>
+        <Link className={appStyles['nav-link']} to="/">Головна</Link>
+        <Link className={appStyles['nav-link']} to="/products">Каталог товарів</Link>
+        <button onClick={() => setIsCartOpen(true)} className={appStyles['cart-btn']}>
           <i className="bi bi-basket3"></i> ({totalItemsCount})
         </button>
-        <button onClick={() => setIsRegisterOpen(true)} className="nav-link auth-modal">
+        <button onClick={() => setIsRegisterOpen(true)} className={`${appStyles['nav-link']} ${appStyles['auth-modal']}`}>
           {`${name} `}
           <i className="bi bi-person-circle"></i>
         </button>

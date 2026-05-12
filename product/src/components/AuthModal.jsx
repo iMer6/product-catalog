@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import "../styles/modal.css";
-import "../styles/authForm.css";
+import modalStyles from "../styles/modal.module.css";
+import formStyles from  "../styles/authForm.module.css";
 
 const AuthModal = ({ isOpen, onClose, setName }) => {
   // state for switching Sign-up/Log-in form
@@ -69,45 +69,45 @@ const AuthModal = ({ isOpen, onClose, setName }) => {
   };
 
   return (
-    <div className='overlay'>
-      <div className='modal' style={{ maxWidth: '450px' }}>
-        <div className='header'>
+    <div className={modalStyles.overlay}>
+      <div className={modalStyles.modal} style={{ maxWidth: '450px' }}>
+        <div className={modalStyles.header}>
           <h2>{isLogin ? "Вхід" : "Реєстрація"}</h2>
-          <button onClick={onClose} className='close-btn'>&times;</button>
+          <button onClick={onClose} className={modalStyles['close-btn']}>&times;</button>
         </div>
 
-        <form onSubmit={handleSubmit} className='content'>
+        <form onSubmit={handleSubmit} className={modalStyles.content}>
           {!isLogin && (
-            <div className='form-group'>
+            <div className={formStyles['form-group']}>
             <label>Ім'я користувача</label>
-            <input type="text" name="username" value={formData.username} onChange={handleChange} required className='form-input'/>
+            <input type="text" name="username" value={formData.username} onChange={handleChange} required className={formStyles['form-input']}/>
           </div>
           )}
 
-          <div className='form-group'>
+          <div className={formStyles['form-group']}>
             <label>Електронна пошта</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} required className='form-input'/>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required className={formStyles['form-input']}/>
           </div>
 
-          <div className='form-group'>
+          <div className={formStyles['form-group']}>
             <label>Пароль</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} required className='form-input'/>
+            <input type="password" name="password" value={formData.password} onChange={handleChange} required className={formStyles['form-input']}/>
           </div>
 
           {!isLogin && (
-            <div className='form-group'>
+            <div className={formStyles['form-group']}>
             <label>Підтвердіть пароль</label>
-            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className='form-input'/>
+            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className={formStyles['form-input']}/>
           </div>
           )}
 
-          <div className='footer' style={{ textAlign: 'center' }}>
-            <button type="submit" className='btn' style={{ width: '100%' }}>
+          <div className={modalStyles.footer} style={{ textAlign: 'center' }}>
+            <button type="submit" className={modalStyles.btn} style={{ width: '100%' }}>
               {isLogin ? "Увійти" : "Створити акаунт"}
             </button>
             <p style={{ marginTop: '10px', fontSize: '14px' }}>
               {isLogin ? "Ще не маєте акаунт?" : "Вже майте акаунт?"}
-              <span className='sU-lI' onClick={() => setIsLogin(!isLogin)}>
+              <span className={formStyles['sU-lI']} onClick={() => setIsLogin(!isLogin)}>
                 {isLogin ? "Зареєструватися" : "Увійти"}
               </span>
             </p>

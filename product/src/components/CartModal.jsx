@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import "../styles/modal.css";
-import "../styles/cart.css";
+import modalStyles from "../styles/modal.module.css";
+import cartStyles from "../styles/cart.module.css";
 
 const CartModal = ({ isOpen, onClose, cartItems, removeFromCart, clearCart }) => {
   useEffect(() => {
@@ -48,32 +48,32 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart, clearCart }) =>
   if (!isOpen) return null;
 
   return (
-    <div className='overlay'>
-      <div className='modal'>
-        <div className='header'>
+    <div className={modalStyles.overlay}>
+      <div className={modalStyles.modal}>
+        <div className={modalStyles.header}>
           <h2>Ваш кошик</h2>
-          <button onClick={onClose} className='close-btn'>&times;</button>
+          <button onClick={onClose} className={modalStyles['close-btn']}>&times;</button>
         </div>
         
-        <div className='content'>
+        <div className={modalStyles.content}>
           {cartItems.length === 0 ? (
             <p style={{ textAlign: 'center' }}>Кошик порожній</p>
           ) : (
             <>
-              <div className='cart-row' style={{ fontWeight: 'bold', borderBottom: '2px solid #eee'}}>
-                <span className='item-name'>Назва товару</span>
+              <div className={cartStyles['cart-row']} style={{ fontWeight: 'bold', borderBottom: '2px solid #eee'}}>
+                <span className={cartStyles['item-name']}>Назва товару</span>
                 <span style={{ textAlign: 'center' }}>Кількість</span>
-                <span className='item-price' style={{ textAlign: 'right' }}>Ціна</span>
+                <span className={cartStyles['item-price']} style={{ textAlign: 'right' }}>Ціна</span>
                 <span></span> {}
               </div>
 
               {cartItems.map((item) => (
-                <div key={item.id} className='cart-row'>
-                  <span className='item-name'>{item.name}</span>
+                <div key={item.id} className={cartStyles['cart-row']}>
+                  <span className={cartStyles['item-name']}>{item.name}</span>
                   <span style={{ textAlign: 'center', fontWeight: 'bold' }}>{item.quantity}</span>
-                  <span className='item-price'>{item.price * item.quantity} грн</span>
-                  <div className='action-area'>
-                    <button onClick={() => removeFromCart(item.id)} className='remove-btn'>Видалити</button>
+                  <span className={cartStyles['item-price']}>{item.price * item.quantity} грн</span>
+                  <div className={cartStyles['action-area']}>
+                    <button onClick={() => removeFromCart(item.id)} className={cartStyles['remove-btn']}>Видалити</button>
                   </div>
                 </div>
               ))}
@@ -82,9 +82,9 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart, clearCart }) =>
         </div>
 
         {cartItems.length > 0 && (
-          <div className='footer'>
+          <div className={modalStyles.footer}>
             <h3>Разом: {totalSum} грн</h3>
-            <button className='btn' onClick={() => handleCheckout()}>Оформити замовлення</button>
+            <button className={modalStyles.btn} onClick={() => handleCheckout()}>Оформити замовлення</button>
           </div>
         )}
       </div>
