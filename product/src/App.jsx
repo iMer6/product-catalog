@@ -5,6 +5,7 @@ import Home from "./components/Home.jsx";
 import CartModal from "./components/CartModal.jsx";
 import AuthModal from "./components/AuthModal.jsx";
 import ProductCatalog from "./components/ProductCatalog.jsx";
+import UserOrders from "./components/userOrders.jsx";
 
 import appStyles from "./App.module.css";
 
@@ -47,6 +48,8 @@ const App = () => {
       <nav className={appStyles['nav-container']}>
         <Link className={appStyles['nav-link']} to="/">Головна</Link>
         <Link className={appStyles['nav-link']} to="/products">Каталог товарів</Link>
+        <Link className={appStyles['nav-link']} to="/orders">Мої замовлення</Link>
+        
         <button onClick={() => setIsCartOpen(true)} className={appStyles['cart-btn']}>
           <i className="bi bi-basket3"></i> ({totalItemsCount})
         </button>
@@ -73,6 +76,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/products" element={<ProductCatalog addToCart={addToCart}/>}/>
+        <Route path="/orders" element={<UserOrders />}/>
       </Routes>
     </Router>
   );

@@ -80,6 +80,14 @@ app.post('/log-in', (req, res) => {
             req.session.userName = user.username;
             req.session.userEmail = user.email;
 
+            return req.session.save((err) => {
+                if (err) {
+                    console.error("Session save error:", err);
+                    return res.status(500).json({ success: false, message: "Server error" });
+                }
+                return res.json({ success: true, message: "Logged in" });
+            });
+
             res.status(200).json({
                 message: 'Successfully authorization',
                 user: { name: user.username, email: user.email }
@@ -112,6 +120,57 @@ app.post('/checkout', (req, res) => {
                 return res.status(500).json({ message: "Error writing file" });
             }
             res.status(200).json({ message: "The order is saved" });
+        });
+    });
+});
+
+app.get('/api/user/orders', (req, res) => {
+    const userEmail = req.headers['useremail'];
+    console.log(userEmail);
+    if (!userEmail) {
+        return res.status(401).json({ 
+            success: false, 
+            message: "Ви не авторизовані" 
+        });
+    }
+
+    const file = 'orders.json';
+
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Помилка читання файлу:", err);
+            return res.status(500).json({ success: false, message: "Server error" });
+        }
+        
+        try {
+            const userOrders = JSON.parse(data).filter(order => order.email === userEmail);
+
+            return res.json({ success: true, orders: userOrders });
+        } catch (parseError) {
+            return res.status(500).json({ success: false, message: "Error parsing JSON" });
+        }
+    });
+});
+
+app.post('/api/user/orders', (req, res) => {
+    const file = 'orders.json';
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: "Помилка читання" });
+
+        let orders = [];
+        try {
+            orders = JSON.parse(data);
+        } catch (e) {
+            console.log("Помилка:", e);
+            orders = [];
+        }
+        const newOrder = { ...req.body };
+
+        orders.push(newOrder);
+
+        fs.writeFile(file, JSON.stringify(orders, null, 2), (err) => {
+            if (err) return res.status(500).json({ error: "Помилка запису" });
+            return res.json({ success: true, order: newOrder });
         });
     });
 });

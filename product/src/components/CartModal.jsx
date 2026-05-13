@@ -16,6 +16,7 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart, clearCart }) =>
 
     const orderData = {
       email: userEmail,
+      status: "Оформлено",
       items: cartItems.map(item => ({
         name: item.name,
         quantity: item.quantity,
@@ -23,7 +24,7 @@ const CartModal = ({ isOpen, onClose, cartItems, removeFromCart, clearCart }) =>
         totalItemPrice: item.price * item.quantity
       })),
       totalSum: totalSum,
-      date: new Date().toLocaleString()
+      date: new Date().toISOString()
     };
 
     try {
