@@ -4,16 +4,12 @@
     align-items: center;
     gap: 20px;
     padding: 10px;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid #a3bda5;
 }
 .item-name {
-    font-size: 16px;
-    font-weight: 500;
-    color: #222;
-    text-align: left;
+    color: #130119;
 }
 .item-price {
-    font-size: 16px;
     color: #27ae60;
     font-weight: bold;
     min-width: 80px;
@@ -26,10 +22,10 @@
 }
 .remove-btn {
     background-color: #ff7675;
-    color: white;
+    color: #fcffff;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
 }
